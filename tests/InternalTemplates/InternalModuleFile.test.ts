@@ -123,6 +123,13 @@ export function InternalModuleFileTests(t: TestTemplaterPlugin) {
             "Reached inclusion depth limit (max = 10)"
         );
         await expect(
+            t.run_and_get_output(
+                `Included: ${`<% tp.file.include('[[Inc1]]') %>`.repeat(
+                    11
+                )}\n\n`
+            )
+        ).to.eventually.equal(`Included: ${`Inc2 content\n\n`.repeat(11)}\n\n`);
+        await expect(
             t.run_and_get_output(`Included: <% tp.file.include('Inc3') %>\n\n`)
         ).to.eventually.be.rejectedWith(
             Error,
